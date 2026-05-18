@@ -1,0 +1,1 @@
+# Habitacion app package initializer

@@ -1,0 +1,1 @@
+# Categoria app package initializer

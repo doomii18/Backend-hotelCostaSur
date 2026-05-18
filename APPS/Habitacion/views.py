@@ -1,0 +1,1 @@
+# Habitacion views placeholder

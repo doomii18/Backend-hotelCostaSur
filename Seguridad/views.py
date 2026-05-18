@@ -1,0 +1,1 @@
+# Seguridad views placeholder
