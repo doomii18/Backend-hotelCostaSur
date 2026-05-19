@@ -108,7 +108,7 @@ def seed():
         if created:
             print(f"Habitación {numero} creada.")
 
-    print("¡Base de datos sembrada con éxito! 🎉")
+    print("Base de datos sembrada con exito!")
 
 if __name__ == '__main__':
     seed()
