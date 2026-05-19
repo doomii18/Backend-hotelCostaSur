@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+
+import dj_database_url
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -72,18 +74,9 @@ WSGI_APPLICATION = 'Config.wsgi.application'
 
 # Database configuration: Microsoft SQL Server (SSMS) connection using mssql-django
 DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': env('DB_NAME', default='HotelCostaSur'),
-        'USER': env('DB_USER', default='sa'),
-        'PASSWORD': env('DB_PASSWORD', default='admin123'),
-        'HOST': env('DB_HOST', default='DESKTOP-KV0J6M3'),
-        'PORT': env('DB_PORT', default='1433'),
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-            'extra_params': 'trustServerCertificate=yes',
-        },
-    }
+    'default': dj_database_url.parse(
+        os.getenv("DATABASE_URL")
+    )
 }
 
 # Password validation
