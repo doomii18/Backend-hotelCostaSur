@@ -16,8 +16,6 @@ def seed():
         (1, 'Habitación Económica'),
         (2, 'Habitación Estándar'),
         (3, 'Suite Ejecutiva'),
-        (4, 'Suite Premium'),
-        (5, 'Habitación Familiar'),
     ]
 
     for id_cat, nombre in categorias_data:
@@ -56,41 +54,38 @@ def seed():
         print("Usuario huésped de prueba creado.")
 
     # 3. Crear Habitaciones (las 25 habitaciones del hotel)
+    # Datos exactos del script SQL Server proporcionado
     habitaciones_data = [
-        # Económicas (Categoría 1)
-        (101, 1, 101, 45.00, "1 Cama Individual, Baño Privado, Wi-Fi Gratis, Ventilador"),
-        (102, 1, 102, 45.00, "1 Cama Individual, Baño Privado, Wi-Fi Gratis, Ventilador"),
-        (103, 1, 103, 60.00, "2 Camas Individuales, Baño Privado, Wi-Fi Gratis, Ventilador"),
-        (104, 1, 104, 60.00, "2 Camas Individuales, Baño Privado, Wi-Fi Gratis, Ventilador"),
-        (105, 1, 105, 75.00, "3 Camas Individuales, Baño Privado, Wi-Fi Gratis, Ventilador"),
+        # Categoría 1: Habitación Económica
+        (1, 1, 1, 500, "2 camas, Matrimonial e Individual, Baño privado"),
+        (2, 1, 2, 500, "2 camas, Matrimonial e Individual, Baño privado"),
+        (3, 1, 3, 400, "Cama matrimonial, Baño privado"),
+        (4, 1, 4, 500, "2 camas Individuales, Baño privado"),
+        (5, 1, 5, 400, "Cama matrimonial, Baño privado"),
+        (6, 1, 6, 400, "Cama matrimonial, Baño privado"),
+        (9, 1, 9, 450, "Cama matrimonial, Baño privado, Televisor"),
+        (10, 1, 10, 450, "Cama matrimonial, Baño privado, Televisor"),
+        (11, 1, 11, 450, "Cama matrimonial, Baño privado, Televisor"),
+        (12, 1, 12, 450, "Cama matrimonial, Baño privado, Televisor"),
+        (13, 1, 13, 450, "Cama matrimonial, Baño privado, Televisor"),
+        (14, 1, 14, 450, "Cama matrimonial, Baño privado, Televisor"),
+        (15, 1, 15, 400, "Cama matrimonial, Baño privado"),
+        (16, 1, 16, 500, "2 camas Individuales, Baño privado"),
+        (17, 1, 17, 400, "Cama matrimonial, Baño privado"),
+        (18, 1, 18, 400, "Cama matrimonial, Baño privado"),
 
-        # Estándar (Categoría 2)
-        (201, 2, 201, 70.00, "1 Cama Queen, Baño Privado, Wi-Fi Gratis, Televisor LED 32\", Ventilador"),
-        (202, 2, 202, 70.00, "1 Cama Queen, Baño Privado, Wi-Fi Gratis, Televisor LED 32\", Ventilador"),
-        (203, 2, 203, 85.00, "2 Camas Matrimoniales, Baño Privado, Wi-Fi Gratis, Televisor LED 32\", Ventilador"),
-        (204, 2, 204, 85.00, "2 Camas Matrimoniales, Baño Privado, Wi-Fi Gratis, Televisor LED 32\", Ventilador"),
-        (205, 2, 205, 95.00, "3 Camas Individuales, Baño Privado, Wi-Fi Gratis, Televisor LED 32\", Ventilador"),
+        # Categoría 2: Habitación Estándar
+        (7, 2, 7, 550, "2 camas Individuales, Baño privado, Televisor"),
+        (8, 2, 8, 550, "2 camas Individuales, Baño privado, Televisor"),
+        (19, 2, 19, 700, "2 camas matrimoniales, Baño privado"),
+        (20, 2, 20, 900, "4 camas individuales, Baño privado"),
+        (21, 2, 21, 700, "3 camas individuales, Baño privado"),
+        (22, 2, 22, 550, "2 camas Individuales, Baño privado, Televisor"),
 
-        # Suite Ejecutiva (Categoría 3)
-        (301, 3, 301, 120.00, "1 Cama King Size, Baño de Lujo con Jacuzzi, Wi-Fi de Alta Velocidad, Televisor Smart 43\", Aire Acondicionado Split, Frigobar, Escritorio de Trabajo"),
-        (302, 3, 302, 120.00, "1 Cama King Size, Baño de Lujo con Jacuzzi, Wi-Fi de Alta Velocidad, Televisor Smart 43\", Aire Acondicionado Split, Frigobar, Escritorio de Trabajo"),
-        (303, 3, 303, 120.00, "1 Cama King Size, Baño de Lujo con Jacuzzi, Wi-Fi de Alta Velocidad, Televisor Smart 43\", Aire Acondicionado Split, Frigobar, Escritorio de Trabajo"),
-        (304, 3, 304, 150.00, "2 Camas Queen Size, Baño de Lujo con Jacuzzi, Wi-Fi de Alta Velocidad, Televisor Smart 43\", Aire Acondicionado Split, Frigobar, Escritorio de Trabajo"),
-        (305, 3, 305, 150.00, "2 Camas Queen Size, Baño de Lujo con Jacuzzi, Wi-Fi de Alta Velocidad, Televisor Smart 43\", Aire Acondicionado Split, Frigobar, Escritorio de Trabajo"),
-
-        # Suite Premium (Categoría 4)
-        (401, 4, 401, 180.00, "1 Cama California King Size, Baño de Mármol con Jacuzzi y Ducha Española, Terraza Privada con Vista al Mar, Wi-Fi de Alta Velocidad, Smart TV 55\", Aire Acondicionado Central, Frigobar Premium, Cafetera Nespresso, Batas y Zapatillas de Baño"),
-        (402, 4, 402, 180.00, "1 Cama California King Size, Baño de Mármol con Jacuzzi y Ducha Española, Terraza Privada con Vista al Mar, Wi-Fi de Alta Velocidad, Smart TV 55\", Aire Acondicionado Central, Frigobar Premium, Cafetera Nespresso, Batas y Zapatillas de Baño"),
-        (403, 4, 403, 180.00, "1 Cama California King Size, Baño de Mármol con Jacuzzi y Ducha Española, Terraza Privada con Vista al Mar, Wi-Fi de Alta Velocidad, Smart TV 55\", Aire Acondicionado Central, Frigobar Premium, Cafetera Nespresso, Batas y Zapatillas de Baño"),
-        (404, 4, 404, 250.00, "1 Cama California King Size, Sala de Estar Independiente, Cocina Equipada, Baño con Jacuzzi Doble, Terraza Panorámica con Piscina Privada, Wi-Fi de Alta Velocidad, Smart TV 65\", Aire Acondicionado, Servicio a la Habitación 24/7"),
-        (405, 4, 405, 250.00, "1 Cama California King Size, Sala de Estar Independiente, Cocina Equipada, Baño con Jacuzzi Doble, Terraza Panorámica con Piscina Privada, Wi-Fi de Alta Velocidad, Smart TV 65\", Aire Acondicionado, Servicio a la Habitación 24/7"),
-
-        # Familiar (Categoría 5)
-        (501, 5, 501, 110.00, "1 Cama Matrimonial y 2 Camas Individuales, Baño Amplio Familiar, Área de Juegos Infantil, Wi-Fi Gratis, Televisor LED 40\", Aire Acondicionado Split, Microondas y Frigobar"),
-        (502, 5, 502, 110.00, "1 Cama Matrimonial y 2 Camas Individuales, Baño Amplio Familiar, Área de Juegos Infantil, Wi-Fi Gratis, Televisor LED 40\", Aire Acondicionado Split, Microondas y Frigobar"),
-        (503, 5, 503, 110.00, "1 Cama Matrimonial y 2 Camas Individuales, Baño Amplio Familiar, Área de Juegos Infantil, Wi-Fi Gratis, Televisor LED 40\", Aire Acondicionado Split, Microondas y Frigobar"),
-        (504, 5, 504, 140.00, "2 Camas Matrimoniales y 2 Camas Individuales (Habitaciones Conectadas), 2 Baños Completos, Sala de Estar Pequeña, Wi-Fi de Alta Velocidad, 2 Smart TV 40\", Aire Acondicionado, Cocina Pequeña"),
-        (505, 5, 505, 140.00, "2 Camas Matrimoniales y 2 Camas Individuales (Habitaciones Conectadas), 2 Baños Completos, Sala de Estar Pequeña, Wi-Fi de Alta Velocidad, 2 Smart TV 40\", Aire Acondicionado, Cocina Pequeña")
+        # Categoría 3: Suite Ejecutiva
+        (23, 3, 23, 1100, "Cama Queen, Baño privado, Aire Acondicionado, Televisor"),
+        (24, 3, 24, 1100, "Cama Queen, Baño privado, Aire Acondicionado, Televisor"),
+        (25, 3, 25, 1100, "Cama Queen, Baño privado, Aire Acondicionado, Televisor"),
     ]
 
     for id_hab, id_cat, numero, precio, desc in habitaciones_data:
