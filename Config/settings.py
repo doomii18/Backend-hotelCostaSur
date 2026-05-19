@@ -70,9 +70,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Config.wsgi.application'
 
-# Database configuration: PostgreSQL online connection
+# Database configuration: Microsoft SQL Server (SSMS) connection using mssql-django
 DATABASES = {
-    'default': env.db('DATABASE_URL', default=f"postgres://{env('DB_USER', default='postgres')}:{env('DB_PASSWORD', default='')}@{env('DB_HOST', default='localhost')}:{env('DB_PORT', default='5432')}/{env('DB_NAME', default='HotelCostaSur')}")
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': env('DB_NAME', default='HotelCostaSur'),
+        'USER': env('DB_USER', default='sa'),
+        'PASSWORD': env('DB_PASSWORD', default='admin123'),
+        'HOST': env('DB_HOST', default='DESKTOP-KV0J6M3'),
+        'PORT': env('DB_PORT', default='1433'),
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'extra_params': 'trustServerCertificate=yes',
+        },
+    }
 }
 
 # Password validation
