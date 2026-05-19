@@ -4,5 +4,6 @@ from APPS.Habitacion.API.SerializerHabitacion import SerializerHabitacion
 
 
 class HabitacionViewSet(viewsets.ModelViewSet):
-    queryset = Habitacion.objects.all().order_by('id_habitacion')
+    queryset = Habitacion.objects.all().order_by('id')
     serializer_class = SerializerHabitacion
+

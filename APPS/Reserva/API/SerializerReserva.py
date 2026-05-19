@@ -3,20 +3,52 @@ from APPS.Reserva.models import Reserva
 
 
 class SerializerReserva(serializers.ModelSerializer):
-    # Dynamic readonly fields to match frontend object structure
-    usuarioNombre = serializers.ReadOnlyField(source='id_usuario.usuario')
-    habitacionNombre = serializers.ReadOnlyField(source='id_habitacion.nombre')
-    habitacionTipo = serializers.ReadOnlyField(source='id_habitacion.tipo')
-    usuarioId = serializers.IntegerField(source='id_usuario.id_usuario', read_only=True)
-    habitacionId = serializers.IntegerField(source='id_habitacion.id_habitacion', read_only=True)
+    # Map read-only fields from the related Cliente and Usuario models
+    usuarioId = serializers.ReadOnlyField(source='id_cliente.id_usuario.id_usuario')
+    usuarioNombre = serializers.ReadOnlyField(source='id_cliente.id_usuario.usuario')
+    
+    nombres = serializers.ReadOnlyField(source='id_cliente.nombres')
+    apellidos = serializers.ReadOnlyField(source='id_cliente.apellidos')
+    tipo_documento = serializers.ReadOnlyField(source='id_cliente.tipo_documento')
+    cedula = serializers.ReadOnlyField(source='id_cliente.cedula')
+    pais_pasaporte = serializers.ReadOnlyField(source='id_cliente.pais_pasaporte')
+    pasaporte = serializers.ReadOnlyField(source='id_cliente.pasaporte')
+    sexo = serializers.ReadOnlyField(source='id_cliente.sexo')
+    fecha_nacimiento = serializers.ReadOnlyField(source='id_cliente.fecha_nacimiento')
+    nacionalidad = serializers.ReadOnlyField(source='id_cliente.nacionalidad')
+    procedencia = serializers.ReadOnlyField(source='id_cliente.procedencia')
+    
+    # Map from Habitacion
+    habitacionId = serializers.ReadOnlyField(source='id_habitacion.id')
+    habitacionNombre = serializers.SerializerMethodField()
+    habitacionTipo = serializers.SerializerMethodField()
+    
+    # Map internal DB fields to frontend format
+    num_huespedes = serializers.IntegerField(source='CantidadHuespedes')
 
     class Meta:
         model = Reserva
         fields = [
-            'id_reserva', 'id_usuario', 'id_habitacion', 'usuarioId', 'habitacionId',
+            'id_reserva', 'id_cliente', 'id_habitacion', 'usuarioId', 'habitacionId',
             'usuarioNombre', 'habitacionNombre', 'habitacionTipo',
             'estado', 'fecha_ingreso', 'fecha_salida', 'dias', 'total',
             'nombres', 'apellidos', 'tipo_documento', 'cedula', 'pais_pasaporte', 'pasaporte',
             'sexo', 'fecha_nacimiento', 'nacionalidad', 'procedencia', 'num_huespedes',
             'metodo_pago', 'fecha_reserva'
         ]
+
+    def get_habitacionNombre(self, obj):
+        return f"Habitación {obj.id_habitacion.Numero_Habitacion}"
+
+    def get_habitacionTipo(self, obj):
+        desc = obj.id_habitacion.Descripcion.lower()
+        if 'matrimonial' in desc or 'queen' in desc or 'king' in desc:
+            return 'Matrimonial'
+        elif 'dos camas' in desc or '2 camas' in desc or 'doble' in desc:
+            return 'Dos camas'
+        elif 'cuatro camas' in desc or '4 camas' in desc:
+            return 'Cuatro camas'
+        elif 'triple' in desc or '3 camas' in desc:
+            return 'Triple cama'
+        return 'Estándar'
+

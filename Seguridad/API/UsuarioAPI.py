@@ -10,9 +10,16 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all().order_by('id_usuario')
     serializer_class = SerializerUsuario
 
-    @action(detail=False, methods=['post'], url_path='register')
+    @action(detail=False, methods=['post'], url_path='registro')
     def register_user(self, request):
-        serializer = self.get_serializer(data=request.data)
+        # Map frontend keys (nombre, email, password) to backend fields
+        mapped_data = {
+            'usuario': request.data.get('nombre'),
+            'correo': request.data.get('email'),
+            'contrasena': request.data.get('password'),
+            'rol': request.data.get('rol', 'user')
+        }
+        serializer = self.get_serializer(data=mapped_data)
         if serializer.is_valid():
             user = serializer.save()
             return Response({
@@ -22,8 +29,9 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], url_path='login')
     def login_user(self, request):
-        usuario_input = request.data.get('usuario')
-        contrasena_input = request.data.get('contrasena')
+        # Map frontend keys (nombre, password) to backend
+        usuario_input = request.data.get('nombre')
+        contrasena_input = request.data.get('password')
 
         if not usuario_input or not contrasena_input:
             return Response({
@@ -47,7 +55,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
                     'token': str(token),
                     'user': {
                         'id': user.id_usuario,
-                        'usuario': user.usuario,
+                        'nombre': user.usuario,  # Map back to frontend expected key
                         'correo': user.correo,
                         'rol': user.rol
                     }
@@ -60,3 +68,4 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             return Response({
                 'message': f'Error en el servidor: {str(e)}'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
