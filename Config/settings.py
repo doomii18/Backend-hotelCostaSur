@@ -84,7 +84,6 @@ if _DATABASE_URL:
         'default': dj_database_url.config(
             default=_DATABASE_URL,
             conn_max_age=600,
-            ssl_require=not bool(os.getenv("DEBUG", True)),
         )
     }
 else:
