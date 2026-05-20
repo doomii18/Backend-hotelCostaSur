@@ -25,6 +25,7 @@ class Reserva(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2)
     metodo_pago = models.CharField(max_length=50, default='presencial')
     fecha_reserva = models.DateTimeField(auto_now_add=True)
+    Estado = models.BooleanField(default=True)  # Soft-delete: True=activa, False=anulada
 
     class Meta:
         db_table = 'reservas'

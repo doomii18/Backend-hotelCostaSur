@@ -13,7 +13,8 @@ class Habitacion(models.Model):
     Numero_Habitacion = models.IntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     Descripcion = models.TextField()
-    Estado = models.BooleanField(default=True)  # maps to BIT in SQL (Estado)
+    Estado = models.BooleanField(default=True)  # Disponibilidad de la habitacion
+    Activo = models.BooleanField(default=True)  # Soft-delete: True=visible, False=anulado
 
     class Meta:
         db_table = 'habitaciones'

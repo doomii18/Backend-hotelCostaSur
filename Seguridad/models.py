@@ -9,6 +9,7 @@ class Usuario(models.Model):
     contrasena = models.CharField(max_length=255)
     rol = models.CharField(max_length=10, default='user')
     fecha_registro = models.DateTimeField(auto_now_add=True)
+    Estado = models.BooleanField(default=True)  # Soft-delete: True=activo, False=anulado
 
     class Meta:
         db_table = 'usuarios'

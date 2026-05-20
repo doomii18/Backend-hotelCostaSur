@@ -11,17 +11,19 @@ class SerializerHabitacion(serializers.ModelSerializer):
     televisor = serializers.SerializerMethodField()
     aire = serializers.SerializerMethodField()
     caracteristicas = serializers.SerializerMethodField()
+    activo = serializers.BooleanField(source='Activo', read_only=True)
 
     class Meta:
         model = Habitacion
-        fields = ['id', 'nombre', 'tipo', 'categoria', 'precio', 'caracteristicas', 'disponible', 'televisor', 'aire']
+        fields = ['id', 'nombre', 'tipo', 'categoria', 'precio', 'caracteristicas',
+                  'disponible', 'televisor', 'aire', 'activo']
 
     def get_nombre(self, obj):
-        return f"Habitación {obj.Numero_Habitacion}"
+        return f"Habitacion {obj.Numero_Habitacion}"
 
     def get_categoria(self, obj):
         cat_name = obj.id_categoria.NombreCategoria.lower()
-        if 'estándar' in cat_name or 'estandar' in cat_name or 'econó' in cat_name or 'econo' in cat_name:
+        if 'estandar' in cat_name or 'estándar' in cat_name or 'econo' in cat_name or 'econó' in cat_name:
             return 'estandar'
         elif 'famili' in cat_name:
             return 'familiares'
@@ -50,7 +52,7 @@ class SerializerHabitacion(serializers.ModelSerializer):
             return 'Cuatro camas'
         elif 'triple' in desc or '3 camas' in desc:
             return 'Triple cama'
-        return 'Estándar'
+        return 'Estandar'
 
     def get_caracteristicas(self, obj):
         try:
@@ -59,4 +61,3 @@ class SerializerHabitacion(serializers.ModelSerializer):
             if obj.Descripcion:
                 return [x.strip() for x in obj.Descripcion.split(',') if x.strip()]
             return []
-

@@ -12,6 +12,7 @@ class ParticipanteSorteo(models.Model):
     edad = models.IntegerField()
     ocupacion = models.CharField(max_length=100)
     fecha_registro = models.DateTimeField(auto_now_add=True)
+    Estado = models.BooleanField(default=True)  # Soft-delete: True=activo, False=anulado
 
     class Meta:
         db_table = 'participantes_sorteo'

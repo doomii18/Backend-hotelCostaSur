@@ -5,4 +5,4 @@ from APPS.Categoria.models import Categoria
 class SerializerCategoria(serializers.ModelSerializer):
     class Meta:
         model = Categoria
-        fields = '__all__'
+        fields = ['id_categoria', 'NombreCategoria', 'Estado']

@@ -5,4 +5,6 @@ from APPS.Sorteo.models import ParticipanteSorteo
 class SerializerSorteo(serializers.ModelSerializer):
     class Meta:
         model = ParticipanteSorteo
-        fields = '__all__'
+        fields = ['id', 'nombres', 'apellidos', 'email', 'telefono',
+                  'departamento', 'sexo', 'edad', 'ocupacion',
+                  'fecha_registro', 'Estado']

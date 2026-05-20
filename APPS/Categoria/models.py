@@ -4,6 +4,7 @@ from django.db import models
 class Categoria(models.Model):
     id_categoria = models.IntegerField(primary_key=True)
     NombreCategoria = models.CharField(max_length=50)
+    Estado = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'Categorias'

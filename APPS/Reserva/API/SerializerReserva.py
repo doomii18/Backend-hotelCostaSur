@@ -3,10 +3,10 @@ from APPS.Reserva.models import Reserva
 
 
 class SerializerReserva(serializers.ModelSerializer):
-    # Map read-only fields from the related Cliente and Usuario models
+    # Campos del Cliente relacionado
     usuarioId = serializers.ReadOnlyField(source='id_cliente.id_usuario.id_usuario')
     usuarioNombre = serializers.ReadOnlyField(source='id_cliente.id_usuario.usuario')
-    
+
     nombres = serializers.ReadOnlyField(source='id_cliente.nombres')
     apellidos = serializers.ReadOnlyField(source='id_cliente.apellidos')
     tipo_documento = serializers.ReadOnlyField(source='id_cliente.tipo_documento')
@@ -17,13 +17,13 @@ class SerializerReserva(serializers.ModelSerializer):
     fecha_nacimiento = serializers.ReadOnlyField(source='id_cliente.fecha_nacimiento')
     nacionalidad = serializers.ReadOnlyField(source='id_cliente.nacionalidad')
     procedencia = serializers.ReadOnlyField(source='id_cliente.procedencia')
-    
-    # Map from Habitacion
+
+    # Campos de la Habitacion relacionada
     habitacionId = serializers.ReadOnlyField(source='id_habitacion.id')
     habitacionNombre = serializers.SerializerMethodField()
     habitacionTipo = serializers.SerializerMethodField()
-    
-    # Map internal DB fields to frontend format
+
+    # Mapear campo interno a formato frontend
     num_huespedes = serializers.IntegerField(source='CantidadHuespedes')
 
     class Meta:
@@ -31,14 +31,14 @@ class SerializerReserva(serializers.ModelSerializer):
         fields = [
             'id_reserva', 'id_cliente', 'id_habitacion', 'usuarioId', 'habitacionId',
             'usuarioNombre', 'habitacionNombre', 'habitacionTipo',
-            'estado', 'fecha_ingreso', 'fecha_salida', 'dias', 'total',
+            'estado', 'Estado', 'fecha_ingreso', 'fecha_salida', 'dias', 'total',
             'nombres', 'apellidos', 'tipo_documento', 'cedula', 'pais_pasaporte', 'pasaporte',
             'sexo', 'fecha_nacimiento', 'nacionalidad', 'procedencia', 'num_huespedes',
             'metodo_pago', 'fecha_reserva'
         ]
 
     def get_habitacionNombre(self, obj):
-        return f"Habitación {obj.id_habitacion.Numero_Habitacion}"
+        return f"Habitacion {obj.id_habitacion.Numero_Habitacion}"
 
     def get_habitacionTipo(self, obj):
         desc = obj.id_habitacion.Descripcion.lower()
@@ -50,5 +50,4 @@ class SerializerReserva(serializers.ModelSerializer):
             return 'Cuatro camas'
         elif 'triple' in desc or '3 camas' in desc:
             return 'Triple cama'
-        return 'Estándar'
-
+        return 'Estandar'
