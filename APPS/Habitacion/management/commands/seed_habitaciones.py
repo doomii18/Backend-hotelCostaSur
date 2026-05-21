@@ -6,10 +6,18 @@ class Command(BaseCommand):
     help = 'Seeds exactly 25 rooms into the database, deleting any others.'
 
     def handle(self, *args, **kwargs):
-        # 1. Asegurar que las categorías existan
-        Categoria.objects.get_or_create(id_categoria=1, defaults={'NombreCategoria': 'Económicas', 'Estado': True})
-        Categoria.objects.get_or_create(id_categoria=2, defaults={'NombreCategoria': 'Estándar', 'Estado': True})
-        Categoria.objects.get_or_create(id_categoria=3, defaults={'NombreCategoria': 'Ejecutiva', 'Estado': True})
+        # 1. Asegurar que las categorías existan con los nombres exactos requeridos
+        cat1, _ = Categoria.objects.get_or_create(id_categoria=1, defaults={'NombreCategoria': 'Estandar', 'Estado': True})
+        cat1.NombreCategoria = 'Estandar'
+        cat1.save()
+
+        cat2, _ = Categoria.objects.get_or_create(id_categoria=2, defaults={'NombreCategoria': 'Familiar', 'Estado': True})
+        cat2.NombreCategoria = 'Familiar'
+        cat2.save()
+
+        cat3, _ = Categoria.objects.get_or_create(id_categoria=3, defaults={'NombreCategoria': 'Premium', 'Estado': True})
+        cat3.NombreCategoria = 'Premium'
+        cat3.save()
 
         habitaciones_data = [
             # Cat, ID, Num, Precio, Desc
