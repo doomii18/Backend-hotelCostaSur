@@ -18,47 +18,37 @@ class SerializerHabitacion(serializers.ModelSerializer):
         fields = ['id', 'nombre', 'tipo', 'categoria', 'precio', 'caracteristicas',
                   'disponible', 'televisor', 'aire', 'activo']
 
+    def _parse_desc(self, obj):
+        try:
+            return json.loads(obj.Descripcion)
+        except Exception:
+            return {}
+
     def get_nombre(self, obj):
-        return f"Habitacion {obj.Numero_Habitacion}"
+        return f"Habitación {obj.Numero_Habitacion}"
 
     def get_categoria(self, obj):
-        cat_name = obj.id_categoria.NombreCategoria.lower()
-        # Map the DB categories to the filter strings used in the frontend
-        if 'estandar' in cat_name or 'econ' in cat_name:
-            return 'estandar'
-        elif 'familiar' in cat_name or 'familia' in cat_name:
-            return 'familiar'
-        elif 'premium' in cat_name or 'aire' in cat_name or 'suite' in cat_name:
-            return 'premium'
-        return cat_name
+        # En la BD la categoría ya es 'estandar', 'familiares' o 'aire'
+        return obj.id_categoria.NombreCategoria
 
     def get_disponible(self, obj):
         return obj.Estado
 
     def get_televisor(self, obj):
-        desc = obj.Descripcion.lower()
-        return 'tv' in desc or 'televisor' in desc or 'smart' in desc
+        return self._parse_desc(obj).get('televisor', False)
 
     def get_aire(self, obj):
-        desc = obj.Descripcion.lower()
-        return 'aire' in desc or 'climatizado' in desc or 'a/c' in desc or obj.id_categoria_id == 3
+        return self._parse_desc(obj).get('aire', False)
 
     def get_tipo(self, obj):
-        desc = obj.Descripcion.lower()
-        if 'matrimonial' in desc or 'queen' in desc or 'king' in desc:
-            return 'Matrimonial'
-        elif 'dos camas' in desc or '2 camas' in desc or 'doble' in desc:
-            return 'Dos camas'
-        elif 'cuatro camas' in desc or '4 camas' in desc:
-            return 'Cuatro camas'
-        elif 'triple' in desc or '3 camas' in desc:
-            return 'Triple cama'
-        return 'Estandar'
+        return self._parse_desc(obj).get('tipo', 'Estandar')
 
     def get_caracteristicas(self, obj):
-        try:
-            return json.loads(obj.Descripcion)
-        except Exception:
-            if obj.Descripcion:
-                return [x.strip() for x in obj.Descripcion.split(',') if x.strip()]
-            return []
+        parsed = self._parse_desc(obj)
+        if 'caracteristicas' in parsed:
+            return parsed['caracteristicas']
+        
+        # Fallback for old data
+        if obj.Descripcion:
+            return [x.strip() for x in obj.Descripcion.split(',') if x.strip()]
+        return []

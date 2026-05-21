@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS habitaciones (
     precio NUMERIC(10,2) NOT NULL,
     "Descripcion" TEXT NOT NULL,
     "Estado" BOOLEAN NOT NULL DEFAULT TRUE,
+    "Activo" BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (id_categoria) REFERENCES "Categorias"(id_categoria) ON DELETE CASCADE
 );
 
@@ -104,75 +105,36 @@ CREATE TABLE IF NOT EXISTS participantes_sorteo (
 
 -- Insertar Categorías
 INSERT INTO "Categorias" (id_categoria, "NombreCategoria") VALUES
-(1, 'Habitación Económica'),
-(2, 'Habitación Estándar'),
-(3, 'Suite Ejecutiva')
+(1, 'estandar'),
+(2, 'familiares'),
+(3, 'aire')
 ON CONFLICT (id_categoria) DO NOTHING;
 
--- Insertar Habitaciones (exactamente 25 habitaciones)
+-- Insertar Habitaciones (exactamente 25 habitaciones con JSON metadata)
 INSERT INTO habitaciones (id_categoria, id, "Numero_Habitacion", precio, "Descripcion", "Estado") VALUES
--- Categoría 1: Económicas
-(1, 1, 1, 500, '2 camas, Matrimonial e Individual, Baño privado', TRUE),
-(1, 2, 2, 500, '2 camas, Matrimonial e Individual, Baño privado', TRUE),
-(1, 3, 3, 400, 'Cama matrimonial, Baño privado', TRUE),
-(1, 4, 4, 500, '2 camas Individuales, Baño privado', TRUE),
-(1, 5, 5, 400, 'Cama matrimonial, Baño privado', TRUE),
-(1, 6, 6, 400, 'Cama matrimonial, Baño privado', TRUE),
-(1, 9, 9, 450, 'Cama matrimonial, Baño privado, Televisor', TRUE),
-(1, 10, 10, 450, 'Cama matrimonial, Baño privado, Televisor', TRUE),
-(1, 11, 11, 450, 'Cama matrimonial, Baño privado, Televisor', TRUE),
-(1, 12, 12, 450, 'Cama matrimonial, Baño privado, Televisor', TRUE),
-(1, 13, 13, 450, 'Cama matrimonial, Baño privado, Televisor', TRUE),
-(1, 14, 14, 450, 'Cama matrimonial, Baño privado, Televisor', TRUE),
-(1, 15, 15, 400, 'Cama matrimonial, Baño privado', TRUE),
-(1, 16, 16, 500, '2 camas Individuales, Baño privado', TRUE),
-(1, 17, 17, 400, 'Cama matrimonial, Baño privado', TRUE),
-(1, 18, 18, 400, 'Cama matrimonial, Baño privado', TRUE),
-
--- Categoría 2: Estándar
-(2, 7, 7, 550, '2 camas Individuales, Baño privado, Televisor', TRUE),
-(2, 8, 8, 550, '2 camas Individuales, Baño privado, Televisor', TRUE),
-(2, 19, 19, 700, '2 camas matrimoniales, Baño privado', TRUE),
-(2, 20, 20, 900, '4 camas individuales, Baño privado', TRUE),
-(2, 21, 21, 700, '3 camas individuales, Baño privado', TRUE),
-(2, 22, 22, 550, '2 camas Individuales, Baño privado, Televisor', TRUE),
-
--- Categoría 3: Ejecutiva
-(3, 23, 23, 1100, 'Cama Queen, Baño privado, Aire Acondicionado, Televisor', TRUE),
-(3, 24, 24, 1100, 'Cama Queen, Baño privado, Aire Acondicionado, Televisor', TRUE),
-(3, 25, 25, 1100, 'Cama Queen, Baño privado, Aire Acondicionado, Televisor', TRUE)
+(1, 1, 1, 500, '{"tipo": "Dos camas", "caracteristicas": ["2 camas", "Matrimonial e Individual", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(1, 2, 2, 500, '{"tipo": "Dos camas", "caracteristicas": ["2 camas", "Matrimonial e Individual", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(1, 3, 3, 400, '{"tipo": "Matrimonial", "caracteristicas": ["Cama matrimonial", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(1, 4, 4, 500, '{"tipo": "Dos camas", "caracteristicas": ["2 camas Individuales", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(1, 5, 5, 400, '{"tipo": "Matrimonial", "caracteristicas": ["Cama matrimonial", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(1, 6, 6, 400, '{"tipo": "Matrimonial", "caracteristicas": ["Cama matrimonial", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(2, 7, 7, 550, '{"tipo": "Dos camas con TV", "caracteristicas": ["2 camas Individuales", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(2, 8, 8, 550, '{"tipo": "Dos camas con TV", "caracteristicas": ["2 camas Individuales", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(1, 9, 9, 450, '{"tipo": "Matrimonial con TV", "caracteristicas": ["Cama matrimonial", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(1, 10, 10, 450, '{"tipo": "Matrimonial con TV", "caracteristicas": ["Cama matrimonial", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(1, 11, 11, 450, '{"tipo": "Matrimonial con TV", "caracteristicas": ["Cama matrimonial", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(1, 12, 12, 450, '{"tipo": "Matrimonial con TV", "caracteristicas": ["Cama matrimonial", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(1, 13, 13, 450, '{"tipo": "Matrimonial con TV", "caracteristicas": ["Cama matrimonial", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(1, 14, 14, 450, '{"tipo": "Matrimonial con TV", "caracteristicas": ["Cama matrimonial", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(1, 15, 15, 400, '{"tipo": "Matrimonial", "caracteristicas": ["Cama matrimonial", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(1, 16, 16, 500, '{"tipo": "Doble cama sin TV", "caracteristicas": ["2 camas Individuales", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(1, 17, 17, 400, '{"tipo": "Matrimonial", "caracteristicas": ["Cama matrimonial", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(1, 18, 18, 400, '{"tipo": "Matrimonial", "caracteristicas": ["Cama matrimonial", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(2, 19, 19, 700, '{"tipo": "Dos camas matrimoniales", "caracteristicas": ["2 camas matrimoniales", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(2, 20, 20, 900, '{"tipo": "Cuatro camas", "caracteristicas": ["4 camas individuales", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(2, 21, 21, 700, '{"tipo": "Triple cama", "caracteristicas": ["3 camas individuales", "Baño privado"], "televisor": false, "aire": false}', TRUE),
+(2, 22, 22, 550, '{"tipo": "Doble cama con TV", "caracteristicas": ["2 camas Individuales", "Baño privado", "Televisor"], "televisor": true, "aire": false}', TRUE),
+(3, 23, 23, 1100, '{"tipo": "Cama Matrimonial", "caracteristicas": ["Cama Queen", "Baño privado", "Aire Acondicionado"], "televisor": true, "aire": true}', TRUE),
+(3, 24, 24, 1100, '{"tipo": "Cama Matrimonial", "caracteristicas": ["Cama Queen", "Baño privado", "Aire Acondicionado"], "televisor": true, "aire": true}', FALSE),
+(3, 25, 25, 1100, '{"tipo": "Cama Matrimonial", "caracteristicas": ["Cama Queen", "Baño privado", "Aire Acondicionado"], "televisor": true, "aire": true}', TRUE)
 ON CONFLICT (id) DO NOTHING;
-
--- =====================================================
--- VERIFICAR DATOS CARGADOS
--- =====================================================
-
--- Verificar categorías
-SELECT 'Categorías' as tabla, COUNT(*) as total FROM "Categorias";
-
--- Verificar habitaciones
-SELECT 'Habitaciones' as tabla, COUNT(*) as total FROM habitaciones;
-
--- Mostrar distribución de habitaciones por categoría
-SELECT
-  c."NombreCategoria" as Categoria,
-  COUNT(h.id) as Cantidad,
-  AVG(h.precio) as Precio_Promedio,
-  MIN(h.precio) as Precio_Minimo,
-  MAX(h.precio) as Precio_Maximo
-FROM habitaciones h
-JOIN "Categorias" c ON h.id_categoria = c.id_categoria
-GROUP BY c."NombreCategoria", h.id_categoria
-ORDER BY h.id_categoria;
-
--- Mostrar todas las habitaciones con su categoría
-SELECT
-  h.id,
-  h."Numero_Habitacion",
-  c."NombreCategoria",
-  h.precio,
-  h."Descripcion",
-  CASE WHEN h."Estado" = true THEN 'Disponible' ELSE 'No disponible' END as Estado
-FROM habitaciones h
-LEFT JOIN "Categorias" c ON h.id_categoria = c.id_categoria
-ORDER BY h.id;
