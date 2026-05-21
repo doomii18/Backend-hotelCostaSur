@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('Habitacion', '0001_initial'),
-        ('Seguridad', '0001_initial'),
+        ('Usuarios', '0001_initial'),
     ]
 
     operations = [
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('total', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('metodo_pago', models.CharField(default='presencial', max_length=50)),
                 ('fecha_reserva', models.DateTimeField(auto_now_add=True)),
-                ('id_cliente', models.ForeignKey(db_column='id_cliente', on_delete=django.db.models.deletion.CASCADE, related_name='reservas', to='Seguridad.cliente')),
+                ('id_cliente', models.ForeignKey(db_column='id_cliente', on_delete=django.db.models.deletion.CASCADE, related_name='reservas', to='Usuarios.cliente')),
                 ('id_habitacion', models.ForeignKey(db_column='id_habitacion', on_delete=django.db.models.deletion.CASCADE, related_name='reservas', to='Habitacion.habitacion')),
             ],
             options={

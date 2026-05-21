@@ -2,8 +2,8 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
-from Seguridad.models import Usuario
-from Seguridad.API.SerializerUsuario import SerializerUsuario
+from Seguridad.Usuarios.models import Usuario
+from Seguridad.Usuarios.API.SerializerUsuario import SerializerUsuario
 
 
 class UsuarioViewSet(viewsets.ModelViewSet):

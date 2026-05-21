@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Seguridad.models import Usuario
+from Seguridad.Usuarios.models import Usuario
 
 
 @admin.register(Usuario)

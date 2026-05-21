@@ -1,5 +1,5 @@
 from django.db import models
-from Seguridad.models import Cliente
+from Seguridad.Usuarios.models import Cliente
 from APPS.Habitacion.models import Habitacion
 
 

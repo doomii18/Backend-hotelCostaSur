@@ -5,7 +5,7 @@ from django.db import transaction
 from django.db.models import Max
 from APPS.Reserva.models import Reserva
 from APPS.Habitacion.models import Habitacion
-from Seguridad.models import Usuario, Cliente
+from Seguridad.Usuarios.models import Usuario, Cliente
 from APPS.Reserva.API.SerializerReserva import SerializerReserva
 
 

@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'corsheaders',
     
     # Local apps
-    'Seguridad.apps.SeguridadConfig',
+    'Seguridad.Usuarios.apps.UsuariosConfig',
     'APPS.Categoria.apps.CategoriaConfig',
     'APPS.Habitacion.apps.HabitacionConfig',
     'APPS.Reserva.apps.ReservaConfig',

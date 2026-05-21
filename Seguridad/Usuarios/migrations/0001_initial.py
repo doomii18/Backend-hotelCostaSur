@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('nacionalidad', models.CharField(max_length=50)),
                 ('procedencia', models.CharField(max_length=100)),
                 ('Estado', models.BooleanField(default=True)),
-                ('id_usuario', models.ForeignKey(db_column='id_usuario', on_delete=django.db.models.deletion.CASCADE, related_name='clientes', to='Seguridad.usuario')),
+                ('id_usuario', models.ForeignKey(db_column='id_usuario', on_delete=django.db.models.deletion.CASCADE, related_name='clientes', to='Usuarios.usuario')),
             ],
             options={
                 'verbose_name': 'Cliente',
