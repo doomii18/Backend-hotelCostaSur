@@ -23,12 +23,13 @@ class SerializerHabitacion(serializers.ModelSerializer):
 
     def get_categoria(self, obj):
         cat_name = obj.id_categoria.NombreCategoria.lower()
-        if 'estandar' in cat_name or 'estándar' in cat_name or 'econo' in cat_name or 'econó' in cat_name:
+        # Map the DB categories to the filter strings used in the frontend
+        if 'estandar' in cat_name or 'econ' in cat_name:
             return 'estandar'
-        elif 'famili' in cat_name:
-            return 'familiares'
-        elif 'aire' in cat_name or 'suite' in cat_name or 'exec' in cat_name or 'premium' in cat_name:
-            return 'aire'
+        elif 'familiar' in cat_name or 'familia' in cat_name:
+            return 'familiar'
+        elif 'premium' in cat_name or 'aire' in cat_name or 'suite' in cat_name:
+            return 'premium'
         return cat_name
 
     def get_disponible(self, obj):
