@@ -5,13 +5,11 @@
 USE HotelCostaSur;
 GO
 
--- 1. Insertar Categorías
+-- 1. Insertar Categorías (ajustadas a los datos)
 INSERT INTO Categorias (id_categoria, NombreCategoria) VALUES
-(1, N'Habitación Económica'),
-(2, N'Habitación Estándar'),
-(3, N'Suite Ejecutiva'),
-(4, N'Suite Premium'),
-(5, N'Habitación Familiar');
+(1, N'Estandar'),
+(2, N'Familiares'),
+(3, N'Aire Acondicionado');
 GO
 
 -- 2. Insertar Administrador por defecto (Contraseña: 2026HOTELCOSTASUR en SHA-256)
@@ -26,35 +24,31 @@ INSERT INTO usuarios (usuario, correo, contrasena, rol, fecha_registro) VALUES
 (N'huesped1', N'huesped@gmail.com', N'5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', N'user', GETDATE());
 GO
 
--- 4. Insertar las 25 habitaciones oficiales con sus características serializadas en JSON
+-- 4. Insertar las 25 habitaciones exactas según el array proporcionado
 INSERT INTO habitaciones (id_habitacion, nombre, tipo, id_categoria, precio, caracteristicas, disponible, televisor, aire) VALUES
-(101, N'Económica Single 101', N'Económica', 1, 45.00, N'["1 Cama Individual", "Baño Privado", "Wi-Fi Gratis", "Ventilador"]', 1, 0, 0),
-(102, N'Económica Single 102', N'Económica', 1, 45.00, N'["1 Cama Individual", "Baño Privado", "Wi-Fi Gratis", "Ventilador"]', 1, 0, 0),
-(103, N'Económica Doble 103', N'Económica', 1, 60.00, N'["2 Camas Individuales", "Baño Privado", "Wi-Fi Gratis", "Ventilador"]', 1, 0, 0),
-(104, N'Económica Doble 104', N'Económica', 1, 60.00, N'["2 Camas Individuales", "Baño Privado", "Wi-Fi Gratis", "Ventilador"]', 1, 0, 0),
-(105, N'Económica Triple 105', N'Económica', 1, 75.00, N'["3 Camas Individuales", "Baño Privado", "Wi-Fi Gratis", "Ventilador"]', 1, 0, 0),
-
-(201, N'Estándar Matrimonial 201', N'Estándar', 2, 70.00, N'["1 Cama Queen", "Baño Privado", "Wi-Fi Gratis", "Televisor LED 32\\"", "Ventilador"]', 1, 1, 0),
-(202, N'Estándar Matrimonial 202', N'Estándar', 2, 70.00, N'["1 Cama Queen", "Baño Privado", "Wi-Fi Gratis", "Televisor LED 32\\"", "Ventilador"]', 1, 1, 0),
-(203, N'Estándar Doble 203', N'Estándar', 2, 85.00, N'["2 Camas Matrimoniales", "Baño Privado", "Wi-Fi Gratis", "Televisor LED 32\\"", "Ventilador"]', 1, 1, 0),
-(204, N'Estándar Doble 204', N'Estándar', 2, 85.00, N'["2 Camas Matrimoniales", "Baño Privado", "Wi-Fi Gratis", "Televisor LED 32\\"", "Ventilador"]', 1, 1, 0),
-(205, N'Estándar Triple 205', N'Estándar', 2, 95.00, N'["3 Camas Individuales", "Baño Privado", "Wi-Fi Gratis", "Televisor LED 32\\"", "Ventilador"]', 1, 1, 0),
-
-(301, N'Suite Ejecutiva 301', N'Suite Ejecutiva', 3, 120.00, N'["1 Cama King Size", "Baño de Lujo con Jacuzzi", "Wi-Fi de Alta Velocidad", "Televisor Smart 43\\"", "Aire Acondicionado Split", "Frigobar", "Escritorio de Trabajo"]', 1, 1, 1),
-(302, N'Suite Ejecutiva 302', N'Suite Ejecutiva', 3, 120.00, N'["1 Cama King Size", "Baño de Lujo con Jacuzzi", "Wi-Fi de Alta Velocidad", "Televisor Smart 43\\"", "Aire Acondicionado Split", "Frigobar", "Escritorio de Trabajo"]', 1, 1, 1),
-(303, N'Suite Ejecutiva 303', N'Suite Ejecutiva', 3, 120.00, N'["1 Cama King Size", "Baño de Lujo con Jacuzzi", "Wi-Fi de Alta Velocidad", "Televisor Smart 43\\"", "Aire Acondicionado Split", "Frigobar", "Escritorio de Trabajo"]', 1, 1, 1),
-(304, N'Suite Ejecutiva Doble 304', N'Suite Ejecutiva', 3, 150.00, N'["2 Camas Queen Size", "Baño de Lujo con Jacuzzi", "Wi-Fi de Alta Velocidad", "Televisor Smart 43\\"", "Aire Acondicionado Split", "Frigobar", "Escritorio de Trabajo"]', 1, 1, 1),
-(305, N'Suite Ejecutiva Doble 305', N'Suite Ejecutiva', 3, 150.00, N'["2 Camas Queen Size", "Baño de Lujo con Jacuzzi", "Wi-Fi de Alta Velocidad", "Televisor Smart 43\\"", "Aire Acondicionado Split", "Frigobar", "Escritorio de Trabajo"]', 1, 1, 1),
-
-(401, N'Suite Premium Vista al Mar 401', N'Suite Premium', 4, 180.00, N'["1 Cama California King Size", "Baño de Mármol con Jacuzzi y Ducha Española", "Terraza Privada con Vista al Mar", "Wi-Fi de Alta Velocidad", "Smart TV 55\\"", "Aire Acondicionado Central", "Frigobar Premium", "Cafetera Nespresso", "Batas y Zapatillas de Baño"]', 1, 1, 1),
-(402, N'Suite Premium Vista al Mar 402', N'Suite Premium', 4, 180.00, N'["1 Cama California King Size", "Baño de Mármol con Jacuzzi y Ducha Española", "Terraza Privada con Vista al Mar", "Wi-Fi de Alta Velocidad", "Smart TV 55\\"", "Aire Acondicionado Central", "Frigobar Premium", "Cafetera Nespresso", "Batas y Zapatillas de Baño"]', 1, 1, 1),
-(403, N'Suite Premium Vista al Mar 403', N'Suite Premium', 4, 180.00, N'["1 Cama California King Size", "Baño de Mármol con Jacuzzi y Ducha Española", "Terraza Privada con Vista al Mar", "Wi-Fi de Alta Velocidad", "Smart TV 55\\"", "Aire Acondicionado Central", "Frigobar Premium", "Cafetera Nespresso", "Batas y Zapatillas de Baño"]', 1, 1, 1),
-(404, N'Suite Premium Presidencial 404', N'Suite Premium', 4, 250.00, N'["1 Cama California King Size", "Sala de Estar Independiente", "Cocina Equipada", "Baño con Jacuzzi Doble", "Terraza Panorámica con Piscina Privada", "Wi-Fi de Alta Velocidad", "Smart TV 65\\"", "Aire Acondicionado", "Servicio a la Habitación 24/7"]', 1, 1, 1),
-(405, N'Suite Premium Presidencial 405', N'Suite Premium', 4, 250.00, N'["1 Cama California King Size", "Sala de Estar Independiente", "Cocina Equipada", "Baño con Jacuzzi Doble", "Terraza Panorámica con Piscina Privada", "Wi-Fi de Alta Velocidad", "Smart TV 65\\"", "Aire Acondicionado", "Servicio a la Habitación 24/7"]', 1, 1, 1),
-
-(501, N'Familiar Confort 501', N'Familiar', 5, 110.00, N'["1 Cama Matrimonial y 2 Camas Individuales", "Baño Amplio Familiar", "Área de Juegos Infantil", "Wi-Fi Gratis", "Televisor LED 40\\"", "Aire Acondicionado Split", "Microondas y Frigobar"]', 1, 1, 1),
-(502, N'Familiar Confort 502', N'Familiar', 5, 110.00, N'["1 Cama Matrimonial y 2 Camas Individuales", "Baño Amplio Familiar", "Área de Juegos Infantil", "Wi-Fi Gratis", "Televisor LED 40\\"", "Aire Acondicionado Split", "Microondas y Frigobar"]', 1, 1, 1),
-(503, N'Familiar Confort 503', N'Familiar', 5, 110.00, N'["1 Cama Matrimonial y 2 Camas Individuales", "Baño Amplio Familiar", "Área de Juegos Infantil", "Wi-Fi Gratis", "Televisor LED 40\\"", "Aire Acondicionado Split", "Microondas y Frigobar"]', 1, 1, 1),
-(504, N'Familiar Grand 504', N'Familiar', 5, 140.00, N'["2 Camas Matrimoniales y 2 Camas Individuales (Habitaciones Conectadas)", "2 Baños Completos", "Sala de Estar Pequeña", "Wi-Fi de Alta Velocidad", "2 Smart TV 40\\"", "Aire Acondicionado", "Cocina Pequeña"]', 1, 1, 1),
-(505, N'Familiar Grand 505', N'Familiar', 5, 140.00, N'["2 Camas Matrimoniales y 2 Camas Individuales (Habitaciones Conectadas)", "2 Baños Completos", "Sala de Estar Pequeña", "Wi-Fi de Alta Velocidad", "2 Smart TV 40\\"", "Aire Acondicionado", "Cocina Pequeña"]', 1, 1, 1);
+(1, N'Habitación 1', N'Dos camas', 1, 500.00, N'["2 camas", "Matrimonial e Individual", "Baño privado"]', 1, 0, 0),
+(2, N'Habitación 2', N'Dos camas', 1, 500.00, N'["2 camas", "Matrimonial e Individual", "Baño privado"]', 1, 0, 0),
+(3, N'Habitación 3', N'Matrimonial', 1, 400.00, N'["Cama matrimonial", "Baño privado"]', 1, 0, 0),
+(4, N'Habitación 4', N'Dos camas', 1, 500.00, N'["2 camas Individuales", "Baño privado"]', 1, 0, 0),
+(5, N'Habitación 5', N'Matrimonial', 1, 400.00, N'["Cama matrimonial", "Baño privado"]', 1, 0, 0),
+(6, N'Habitación 6', N'Matrimonial', 1, 400.00, N'["Cama matrimonial", "Baño privado"]', 1, 0, 0),
+(7, N'Habitación 7', N'Dos camas con TV', 2, 550.00, N'["2 camas Individuales", "Baño privado", "Televisor"]', 1, 1, 0),
+(8, N'Habitación 8', N'Dos camas con TV', 2, 550.00, N'["2 camas Individuales", "Baño privado", "Televisor"]', 1, 1, 0),
+(9, N'Habitación 9', N'Matrimonial con TV', 1, 450.00, N'["Cama matrimonial", "Baño privado", "Televisor"]', 1, 1, 0),
+(10, N'Habitación 10', N'Matrimonial con TV', 1, 450.00, N'["Cama matrimonial", "Baño privado", "Televisor"]', 1, 1, 0),
+(11, N'Habitación 11', N'Matrimonial con TV', 1, 450.00, N'["Cama matrimonial", "Baño privado", "Televisor"]', 1, 1, 0),
+(12, N'Habitación 12', N'Matrimonial con TV', 1, 450.00, N'["Cama matrimonial", "Baño privado", "Televisor"]', 1, 1, 0),
+(13, N'Habitación 13', N'Matrimonial con TV', 1, 450.00, N'["Cama matrimonial", "Baño privado", "Televisor"]', 1, 1, 0),
+(14, N'Habitación 14', N'Matrimonial con TV', 1, 450.00, N'["Cama matrimonial", "Baño privado", "Televisor"]', 1, 1, 0),
+(15, N'Habitación 15', N'Matrimonial', 1, 400.00, N'["Cama matrimonial", "Baño privado"]', 1, 0, 0),
+(16, N'Habitación 16', N'Doble cama sin TV', 1, 500.00, N'["2 camas Individuales", "Baño privado"]', 1, 0, 0),
+(17, N'Habitación 17', N'Matrimonial', 1, 400.00, N'["Cama matrimonial", "Baño privado"]', 1, 0, 0),
+(18, N'Habitación 18', N'Matrimonial', 1, 400.00, N'["Cama matrimonial", "Baño privado"]', 1, 0, 0),
+(19, N'Habitación 19', N'Dos camas matrimoniales', 2, 700.00, N'["2 camas matrimoniales", "Baño privado"]', 1, 0, 0),
+(20, N'Habitación 20', N'Cuatro camas', 2, 900.00, N'["4 camas individuales", "Baño privado"]', 1, 0, 0),
+(21, N'Habitación 21', N'Triple cama', 2, 700.00, N'["3 camas individuales", "Baño privado"]', 1, 0, 0),
+(22, N'Habitación 22', N'Doble cama con TV', 2, 550.00, N'["2 camas Individuales", "Baño privado", "Televisor"]', 1, 1, 0),
+(23, N'Habitación 23', N'Cama Matrimonial', 3, 1100.00, N'["Cama Queen", "Baño privado", "Aire Acondicionado"]', 1, 1, 1),
+(24, N'Habitación 24', N'Cama Matrimonial', 3, 1100.00, N'["Cama Queen", "Baño privado", "Aire Acondicionado"]', 0, 1, 1),
+(25, N'Habitación 25', N'Cama Matrimonial', 3, 1100.00, N'["Cama Queen", "Baño privado", "Aire Acondicionado"]', 1, 1, 1);
 GO

@@ -128,8 +128,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Settings
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://hotel-costa-sur-production.up.railway.app",   # o la URL donde sirvas el HTML
+    "http://localhost:3000",                     # para pruebas locales
+]
 
 # Django Rest Framework & SimpleJWT Authentication configuration
 REST_FRAMEWORK = {
