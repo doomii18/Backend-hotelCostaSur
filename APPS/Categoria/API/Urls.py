@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from APPS.Categoria.API.CategoriaAPI import CategoriaViewSet
 
 router = DefaultRouter()
+router.trailing_slash = '/?'
 router.register(r'', CategoriaViewSet, basename='categoria')
 
 urlpatterns = [

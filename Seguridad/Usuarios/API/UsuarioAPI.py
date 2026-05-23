@@ -31,7 +31,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             'usuario': request.data.get('nombre'),
             'correo': request.data.get('email'),
             'contrasena': request.data.get('password'),
-            'rol': request.data.get('rol', 'user')
+            
         }
         serializer = self.get_serializer(data=mapped_data)
         if serializer.is_valid():
