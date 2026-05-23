@@ -1,11 +1,20 @@
 from django.contrib import admin
 from django.urls import path, include
 from Seguridad.Usuarios.API.UsuarioAPI import UsuarioViewSet
+from APPS.Reserva.API.ReservaAPI import ReservaViewSet
+from APPS.Habitacion.API.HabitacionAPI import HabitacionViewSet
+from APPS.Sorteo.API.SorteoAPI import SorteoViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/usuarios/registro', UsuarioViewSet.as_view({'post': 'register_user'})),
     path('api/usuarios/login', UsuarioViewSet.as_view({'post': 'login_user'})),
+    path('api/usuarios', UsuarioViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('api/reservas', ReservaViewSet.as_view({'get': 'list', 'post': 'crear'})),
+    path('api/reservas/mis-reservas', ReservaViewSet.as_view({'get': 'mis_reservas'})),
+    path('api/habitaciones', HabitacionViewSet.as_view({'get': 'list'})),
+    path('api/sorteos', SorteoViewSet.as_view({'post': 'crear'})),
+    
     path('api/usuarios/', include('Seguridad.Usuarios.API.Urls')),
     path('api/categorias/', include('APPS.Categoria.API.Urls')),
     path('api/habitaciones/', include('APPS.Habitacion.API.Urls')),
