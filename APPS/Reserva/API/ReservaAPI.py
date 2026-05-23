@@ -44,6 +44,9 @@ class ReservaViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'], url_path='crear')
     def crear(self, request):
         usuario_id = request.data.get('usuarioId')
+        if not usuario_id and request.user and request.user.is_authenticated:
+            usuario_id = request.user.id
+            
         habitacion_id = request.data.get('habitacionId')
 
         if not usuario_id or not habitacion_id:
@@ -86,7 +89,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
                     id_habitacion=room,
                     fecha_ingreso=request.data.get('fechaIngreso'),
                     fecha_salida=request.data.get('fechaSalida'),
-                    CantidadHuespedes=int(request.data.get('numHuespedes', 1)),
+                    CantidadHuespedes=int(request.data.get('numHuespedes', request.data.get('huespedes', 1))),
                     metodo_pago=request.data.get('metodoPago'),
                     dias=int(request.data.get('dias', 1)),
                     total=float(request.data.get('total', 0.0)),
