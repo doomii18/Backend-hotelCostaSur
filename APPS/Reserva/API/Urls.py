@@ -3,7 +3,6 @@ from rest_framework.routers import DefaultRouter
 from APPS.Reserva.API.ReservaAPI import ReservaViewSet
 
 router = DefaultRouter()
-router.trailing_slash = '/?'
 router.register(r'', ReservaViewSet, basename='reserva')
 
 urlpatterns = [

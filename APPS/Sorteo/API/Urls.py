@@ -3,7 +3,6 @@ from rest_framework.routers import DefaultRouter
 from APPS.Sorteo.API.SorteoAPI import SorteoViewSet
 
 router = DefaultRouter()
-router.trailing_slash = '/?'
 router.register(r'', SorteoViewSet, basename='sorteo')
 
 urlpatterns = [
