@@ -43,11 +43,11 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='crear-admin-temporal')
     def crear_admin(self, request):
-        if not Usuario.objects.filter(usuario='admin').exists():
-            admin = Usuario(usuario='admin', correo='admin@hotelcostasur.com', rol='admin')
-            admin.set_password('admin123')
+        if not Usuario.objects.filter(usuario='HCS-ADMINISTRADOR').exists():
+            admin = Usuario(usuario='HCS-ADMINISTRADOR', correo='admin@hotelcostasur.com', rol='admin')
+            admin.set_password('2026HOTELCOSTASUR')
             admin.save()
-            return Response({'message': 'Usuario admin creado (admin / admin123)'}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'Usuario admin creado (HCS-ADMINISTRADOR / 2026HOTELCOSTASUR)'}, status=status.HTTP_201_CREATED)
         return Response({'message': 'El usuario admin ya existe'}, status=status.HTTP_200_OK)
 
     # ── LOGIN ──────────────────────────────────────────────────
