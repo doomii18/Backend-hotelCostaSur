@@ -1,6 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework.authentication import BaseAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
 from Seguridad.Usuarios.models import Usuario
 from Seguridad.Usuarios.API.SerializerUsuario import SerializerUsuario
@@ -24,8 +26,9 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(usuarios, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # ── REGISTRO ───────────────────────────────────────────────
-    @action(detail=False, methods=['post'], url_path='registro')
+    # ── REGISTRO (publico, sin autenticacion) ──────────────────
+    @action(detail=False, methods=['post'], url_path='registro',
+            authentication_classes=[], permission_classes=[AllowAny])
     def register_user(self, request):
         mapped_data = {
             'usuario': request.data.get('nombre'),
@@ -41,7 +44,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['get'], url_path='crear-admin-temporal')
+    @action(detail=False, methods=['get'], url_path='crear-admin-temporal',
+            authentication_classes=[], permission_classes=[AllowAny])
     def crear_admin(self, request):
         if not Usuario.objects.filter(usuario='HCS-ADMINISTRADOR').exists():
             admin = Usuario(usuario='HCS-ADMINISTRADOR', correo='admin@hotelcostasur.com', rol='admin')
@@ -54,8 +58,9 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         admin.save()
         return Response({'message': 'Contrasena del admin actualizada.'}, status=status.HTTP_200_OK)
 
-    # ── LOGIN ──────────────────────────────────────────────────
-    @action(detail=False, methods=['post'], url_path='login')
+    # ── LOGIN (publico, sin autenticacion) ─────────────────────
+    @action(detail=False, methods=['post'], url_path='login',
+            authentication_classes=[], permission_classes=[AllowAny])
     def login_user(self, request):
         usuario_input = request.data.get('nombre')
         contrasena_input = request.data.get('password')
