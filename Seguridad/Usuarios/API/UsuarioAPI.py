@@ -47,8 +47,12 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             admin = Usuario(usuario='HCS-ADMINISTRADOR', correo='admin@hotelcostasur.com', rol='admin')
             admin.set_password('2026HOTELCOSTASUR')
             admin.save()
-            return Response({'message': 'Usuario admin creado (HCS-ADMINISTRADOR / 2026HOTELCOSTASUR)'}, status=status.HTTP_201_CREATED)
-        return Response({'message': 'El usuario admin ya existe'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Admin creado: HCS-ADMINISTRADOR / 2026HOTELCOSTASUR'}, status=status.HTTP_201_CREATED)
+        # Si existe, actualizar la contrasena
+        admin = Usuario.objects.get(usuario='HCS-ADMINISTRADOR')
+        admin.set_password('2026HOTELCOSTASUR')
+        admin.save()
+        return Response({'message': 'Contrasena del admin actualizada.'}, status=status.HTTP_200_OK)
 
     # ── LOGIN ──────────────────────────────────────────────────
     @action(detail=False, methods=['post'], url_path='login')

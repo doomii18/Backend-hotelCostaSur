@@ -26,12 +26,18 @@ class SerializerReserva(serializers.ModelSerializer):
     # Mapear campo interno a formato frontend
     num_huespedes = serializers.IntegerField(source='CantidadHuespedes')
 
+    # Alias frontend-friendly
+    id = serializers.IntegerField(source='id_reserva', read_only=True)
+    fechaIngreso = serializers.DateField(source='fecha_ingreso')
+    fechaSalida = serializers.DateField(source='fecha_salida')
+
     class Meta:
         model = Reserva
         fields = [
-            'id_reserva', 'id_cliente', 'id_habitacion', 'usuarioId', 'habitacionId',
+            'id', 'id_reserva', 'id_cliente', 'id_habitacion', 'usuarioId', 'habitacionId',
             'usuarioNombre', 'habitacionNombre', 'habitacionTipo',
-            'estado', 'Estado', 'fecha_ingreso', 'fecha_salida', 'dias', 'total',
+            'estado', 'Estado', 'fecha_ingreso', 'fecha_salida', 'fechaIngreso', 'fechaSalida',
+            'dias', 'total',
             'nombres', 'apellidos', 'tipo_documento', 'cedula', 'pais_pasaporte', 'pasaporte',
             'sexo', 'fecha_nacimiento', 'nacionalidad', 'procedencia', 'num_huespedes',
             'metodo_pago', 'fecha_reserva'
