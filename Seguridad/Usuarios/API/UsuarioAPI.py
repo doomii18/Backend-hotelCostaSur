@@ -47,14 +47,14 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='crear-admin-temporal',
             authentication_classes=[], permission_classes=[AllowAny])
     def crear_admin(self, request):
-        if not Usuario.objects.filter(usuario='HCS-ADMINISTRADOR').exists():
-            admin = Usuario(usuario='HCS-ADMINISTRADOR', correo='admin@hotelcostasur.com', rol='admin')
-            admin.set_password('2026HOTELCOSTASUR')
+        if not Usuario.objects.filter(usuario='HCS-ADMIN').exists():
+            admin = Usuario(usuario='HCS-ADMIN', correo='admin@hotelcostasur.com', rol='admin')
+            admin.set_password('HOTEL2026')
             admin.save()
-            return Response({'message': 'Admin creado: HCS-ADMINISTRADOR / 2026HOTELCOSTASUR'}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'Admin creado: HCS-ADMIN / HOTEL2026'}, status=status.HTTP_201_CREATED)
         # Si existe, actualizar la contrasena
-        admin = Usuario.objects.get(usuario='HCS-ADMINISTRADOR')
-        admin.set_password('2026HOTELCOSTASUR')
+        admin = Usuario.objects.get(usuario='HCS-ADMIN')
+        admin.set_password('HOTEL2026')
         admin.save()
         return Response({'message': 'Contrasena del admin actualizada.'}, status=status.HTTP_200_OK)
 

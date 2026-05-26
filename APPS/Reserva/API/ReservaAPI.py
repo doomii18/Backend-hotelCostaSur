@@ -44,26 +44,32 @@ class ReservaViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'], url_path='crear')
     def crear(self, request):
         usuario_id = request.data.get('usuarioId')
+        
+        # 1. Check if user is authenticated
         if not usuario_id and request.user and request.user.is_authenticated:
             usuario_id = request.user.id
             
         habitacion_id = request.data.get('habitacionId')
-
-        if not usuario_id or not habitacion_id:
-            return Response({
-                'message': 'Campos obligatorios faltantes: usuarioId o habitacionId.'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        if not habitacion_id:
+            return Response({'message': 'Campo obligatorio faltante: habitacionId.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             with transaction.atomic():
-                user = Usuario.objects.get(pk=usuario_id)
                 room = Habitacion.objects.get(pk=habitacion_id)
-
                 if not room.Estado:
-                    return Response({
-                        'message': f'La habitacion {room.Numero_Habitacion} ya no esta disponible.'
-                    }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'message': f'La habitacion {room.Numero_Habitacion} ya no esta disponible.'}, status=status.HTTP_400_BAD_REQUEST)
 
+                user = None
+                
+                # 2. Try to get user by ID if provided
+                if usuario_id:
+                    try:
+                        user = Usuario.objects.get(pk=usuario_id)
+                    except Usuario.DoesNotExist:
+                        return Response({'message': 'Usuario no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    return Response({'message': 'Debe iniciar sesion para reservar.'}, status=status.HTTP_401_UNAUTHORIZED)
+                
                 # Buscar o crear perfil de cliente
                 cliente = Cliente.objects.filter(id_usuario=user).first()
                 if not cliente:
@@ -107,15 +113,10 @@ class ReservaViewSet(viewsets.ModelViewSet):
                     'id_reserva': reserva.id_reserva
                 }, status=status.HTTP_201_CREATED)
 
-        except Usuario.DoesNotExist:
-            return Response({'message': 'El usuario ingresado no existe.'},
-                            status=status.HTTP_404_NOT_FOUND)
         except Habitacion.DoesNotExist:
-            return Response({'message': 'La habitacion seleccionada no existe.'},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'La habitacion seleccionada no existe.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'message': f'Error al registrar reserva: {str(e)}'},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'message': f'Error al registrar reserva: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # ── ACTUALIZAR ─────────────────────────────────────────────
     @action(detail=False, methods=['put'], url_path='actualizar')
@@ -241,3 +242,27 @@ class ReservaViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'message': f'Error al realizar Check-Out: {str(e)}'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    # ── FECHAS NO DISPONIBLES ─────────────────────────────────
+    @action(detail=False, methods=['get'], url_path='fechas-no-disponibles/(?P<habitacion_id>\d+)')
+    def fechas_no_disponibles(self, request, habitacion_id=None):
+        if not habitacion_id:
+            return Response({'message': 'Se requiere el ID de la habitacion.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Obtener todas las reservas activas/pendientes para esta habitacion
+        reservas = Reserva.objects.filter(
+            id_habitacion=habitacion_id,
+            Estado=True,
+            estado__in=['pendiente', 'activo']
+        )
+        
+        fechas_ocupadas = []
+        import datetime
+        for r in reservas:
+            if r.fecha_ingreso and r.fecha_salida:
+                curr_date = r.fecha_ingreso
+                while curr_date <= r.fecha_salida:
+                    fechas_ocupadas.append(curr_date.strftime('%Y-%m-%d'))
+                    curr_date += datetime.timedelta(days=1)
+                    
+        return Response({'fechas': list(set(fechas_ocupadas))}, status=status.HTTP_200_OK)
