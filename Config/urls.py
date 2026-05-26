@@ -7,14 +7,14 @@ from APPS.Sorteo.API.SorteoAPI import SorteoViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/usuarios/registro', UsuarioViewSet.as_view({'post': 'register_user'})),
-    path('api/usuarios/login', UsuarioViewSet.as_view({'post': 'login_user'})),
-    path('api/usuarios', UsuarioViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('api/reservas', ReservaViewSet.as_view({'get': 'list', 'post': 'crear'})),
-    path('api/reservas/mis-reservas', ReservaViewSet.as_view({'get': 'mis_reservas'})),
-    path('api/reservas/fechas-no-disponibles/<int:habitacion_id>', ReservaViewSet.as_view({'get': 'fechas_no_disponibles'})),
-    path('api/habitaciones', HabitacionViewSet.as_view({'get': 'list'})),
-    path('api/sorteos', SorteoViewSet.as_view({'post': 'crear'})),
+    path('api/usuarios/registro/', UsuarioViewSet.as_view({'post': 'register_user'})),
+    path('api/usuarios/login/', UsuarioViewSet.as_view({'post': 'login_user'})),
+    path('api/usuarios/', UsuarioViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('api/reservas/', ReservaViewSet.as_view({'get': 'list', 'post': 'crear'})),
+    path('api/reservas/mis-reservas/', ReservaViewSet.as_view({'get': 'mis_reservas'})),
+    path('api/reservas/fechas-no-disponibles/<int:habitacion_id>/', ReservaViewSet.as_view({'get': 'fechas_no_disponibles'})),
+    path('api/habitaciones/', HabitacionViewSet.as_view({'get': 'list'})),
+    path('api/sorteos/', SorteoViewSet.as_view({'post': 'crear'})),
     
     path('api/usuarios/', include('Seguridad.Usuarios.API.Urls')),
     path('api/categorias/', include('APPS.Categoria.API.Urls')),
