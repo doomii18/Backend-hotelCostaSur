@@ -32,7 +32,21 @@ class SerializerHabitacion(serializers.ModelSerializer):
         return obj.id_categoria.NombreCategoria
 
     def get_disponible(self, obj):
-        return obj.Estado
+        from django.utils import timezone
+        from APPS.Reserva.models import Reserva
+        
+        today = timezone.localtime(timezone.now()).date()
+        
+        # Una habitación está disponible si no hay ninguna reserva activa o pendiente para hoy
+        tiene_reserva_hoy = Reserva.objects.filter(
+            id_habitacion=obj,
+            Estado=True,  # No eliminada soft-delete
+            estado__in=['pendiente', 'activo'],
+            fecha_ingreso__lte=today,
+            fecha_salida__gte=today
+        ).exists()
+        
+        return not tiene_reserva_hoy
 
     def get_televisor(self, obj):
         return self._parse_desc(obj).get('televisor', False)
