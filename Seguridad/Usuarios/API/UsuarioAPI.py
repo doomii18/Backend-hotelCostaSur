@@ -2,7 +2,6 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from rest_framework.authentication import BaseAuthentication
 from rest_framework_simplejwt.tokens import AccessToken
 from Seguridad.Usuarios.models import Usuario
 from Seguridad.Usuarios.API.SerializerUsuario import SerializerUsuario
@@ -30,13 +29,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'], url_path='registro',
             authentication_classes=[], permission_classes=[AllowAny])
     def register_user(self, request):
-        mapped_data = {
-            'usuario': request.data.get('nombre'),
-            'correo': request.data.get('email'),
-            'contrasena': request.data.get('password'),
-            
-        }
-        serializer = self.get_serializer(data=mapped_data)
+        # El frontend envia { nombre, email, password }
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             return Response({
@@ -122,6 +116,19 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             return Response({
                 'message': f'Usuario "{usuario.usuario}" actualizado exitosamente.',
                 'data': self.get_serializer(usuario).data
+            }, status=status.HTTP_200_OK)
+        except Usuario.DoesNotExist:
+            return Response({'message': 'Usuario no encontrado.'},
+                            status=status.HTTP_404_NOT_FOUND)
+
+    # ── SOFT-DELETE (destroy override) ─────────────────────────
+    def destroy(self, request, *args, **kwargs):
+        try:
+            usuario = self.get_object()
+            usuario.Estado = False
+            usuario.save()
+            return Response({
+                'message': f'Usuario "{usuario.usuario}" eliminado exitosamente.'
             }, status=status.HTTP_200_OK)
         except Usuario.DoesNotExist:
             return Response({'message': 'Usuario no encontrado.'},

@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from django.db import transaction
 from django.db.models import Max
 from APPS.Reserva.models import Reserva
@@ -56,8 +57,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 room = Habitacion.objects.get(pk=habitacion_id)
-                if not room.Estado:
-                    return Response({'message': f'La habitacion {room.Numero_Habitacion} ya no esta disponible.'}, status=status.HTTP_400_BAD_REQUEST)
 
                 user = None
                 
@@ -66,9 +65,9 @@ class ReservaViewSet(viewsets.ModelViewSet):
                     try:
                         user = Usuario.objects.get(pk=usuario_id)
                     except Usuario.DoesNotExist:
-                        return Response({'message': 'Usuario no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+                        return Response({'message': 'Usuario no encontrado. Debe registrarse primero.'}, status=status.HTTP_404_NOT_FOUND)
                 else:
-                    return Response({'message': 'Debe iniciar sesion para reservar.'}, status=status.HTTP_401_UNAUTHORIZED)
+                    return Response({'message': 'Debe iniciar sesion y registrarse para reservar.'}, status=status.HTTP_401_UNAUTHORIZED)
                 
                 # Buscar o crear perfil de cliente
                 cliente = Cliente.objects.filter(id_usuario=user).first()
@@ -89,6 +88,19 @@ class ReservaViewSet(viewsets.ModelViewSet):
                         procedencia=request.data.get('procedencia'),
                         Estado=True
                     )
+                else:
+                    # Update client info with latest data
+                    cliente.tipo_documento = request.data.get('tipoDocumento', cliente.tipo_documento)
+                    cliente.cedula = request.data.get('cedula', cliente.cedula)
+                    cliente.pais_pasaporte = request.data.get('paisPasaporte', cliente.pais_pasaporte)
+                    cliente.pasaporte = request.data.get('pasaporte', cliente.pasaporte)
+                    cliente.nombres = request.data.get('nombres', cliente.nombres)
+                    cliente.apellidos = request.data.get('apellidos', cliente.apellidos)
+                    cliente.sexo = request.data.get('sexo', cliente.sexo)
+                    cliente.fecha_nacimiento = request.data.get('fechaNacimiento', cliente.fecha_nacimiento)
+                    cliente.nacionalidad = request.data.get('nacionalidad', cliente.nacionalidad)
+                    cliente.procedencia = request.data.get('procedencia', cliente.procedencia)
+                    cliente.save()
 
                 reserva = Reserva(
                     id_cliente=cliente,
@@ -103,9 +115,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
                     Estado=True
                 )
 
-                # Marcar habitacion como ocupada
-                room.Estado = False
-                room.save()
                 reserva.save()
 
                 return Response({
@@ -128,18 +137,22 @@ class ReservaViewSet(viewsets.ModelViewSet):
         try:
             reserva = Reserva.objects.get(pk=id_reserva)
             # Campos actualizables
-            if 'fecha_ingreso' in request.data:
-                reserva.fecha_ingreso = request.data['fecha_ingreso']
-            if 'fecha_salida' in request.data:
-                reserva.fecha_salida = request.data['fecha_salida']
+            if 'fechaIngreso' in request.data:
+                reserva.fecha_ingreso = request.data['fechaIngreso']
+            if 'fechaSalida' in request.data:
+                reserva.fecha_salida = request.data['fechaSalida']
             if 'dias' in request.data:
                 reserva.dias = int(request.data['dias'])
             if 'total' in request.data:
                 reserva.total = float(request.data['total'])
             if 'numHuespedes' in request.data:
                 reserva.CantidadHuespedes = int(request.data['numHuespedes'])
+            if 'huespedes' in request.data:
+                reserva.CantidadHuespedes = int(request.data['huespedes'])
             if 'metodo_pago' in request.data:
                 reserva.metodo_pago = request.data['metodo_pago']
+            if 'metodoPago' in request.data:
+                reserva.metodo_pago = request.data['metodoPago']
             if 'estado' in request.data:
                 reserva.estado = request.data['estado']
             reserva.save()
@@ -150,6 +163,27 @@ class ReservaViewSet(viewsets.ModelViewSet):
         except Reserva.DoesNotExist:
             return Response({'message': 'Reserva no encontrada.'},
                             status=status.HTTP_404_NOT_FOUND)
+
+    # ── SOFT-DELETE (destroy override) ─────────────────────────
+    def destroy(self, request, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                reserva = self.get_object()
+                reserva.Estado = False
+                reserva.estado = 'cancelado'
+                reserva.save()
+
+                # Liberar la habitacion
+                room = reserva.id_habitacion
+                room.Estado = True
+                room.save()
+
+                return Response({
+                    'message': f'Reserva #{reserva.id_reserva} cancelada. Habitacion {room.Numero_Habitacion} liberada.'
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': f'Error: {str(e)}'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # ── ANULAR (soft-delete + liberar habitacion) ──────────────
     @action(detail=False, methods=['post'], url_path='anular')
@@ -191,11 +225,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
                 reserva.estado = 'pendiente'
                 reserva.save()
 
-                # Re-ocupar la habitacion
-                room = reserva.id_habitacion
-                room.Estado = False
-                room.save()
-
                 return Response({
                     'message': f'Reserva #{reserva.id_reserva} restaurada exitosamente.'
                 }, status=status.HTTP_200_OK)
@@ -204,11 +233,11 @@ class ReservaViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_404_NOT_FOUND)
 
     # ── CHECK-IN ───────────────────────────────────────────────
-    @action(detail=True, methods=['post'], url_path='checkin')
-    def checkin(self, request, pk=None):
+    @action(detail=False, methods=['post', 'put'], url_path='checkin/(?P<reserva_id>\\d+)')
+    def checkin(self, request, reserva_id=None):
         try:
             with transaction.atomic():
-                reserva = self.get_object()
+                reserva = Reserva.objects.get(pk=reserva_id)
                 reserva.estado = 'activo'
                 reserva.save()
 
@@ -219,16 +248,18 @@ class ReservaViewSet(viewsets.ModelViewSet):
                 return Response({
                     'message': f'Check-In registrado para la reserva #{reserva.id_reserva}.'
                 }, status=status.HTTP_200_OK)
+        except Reserva.DoesNotExist:
+            return Response({'message': 'Reserva no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'message': f'Error al realizar Check-In: {str(e)}'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # ── CHECK-OUT ──────────────────────────────────────────────
-    @action(detail=True, methods=['post'], url_path='checkout')
-    def checkout(self, request, pk=None):
+    @action(detail=False, methods=['post', 'put'], url_path='checkout/(?P<reserva_id>\\d+)')
+    def checkout(self, request, reserva_id=None):
         try:
             with transaction.atomic():
-                reserva = self.get_object()
+                reserva = Reserva.objects.get(pk=reserva_id)
                 reserva.estado = 'completado'
                 reserva.save()
 
@@ -239,15 +270,19 @@ class ReservaViewSet(viewsets.ModelViewSet):
                 return Response({
                     'message': f'Check-Out registrado para la reserva #{reserva.id_reserva}. Habitacion {room.Numero_Habitacion} liberada.'
                 }, status=status.HTTP_200_OK)
+        except Reserva.DoesNotExist:
+            return Response({'message': 'Reserva no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'message': f'Error al realizar Check-Out: {str(e)}'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # ── FECHAS NO DISPONIBLES ─────────────────────────────────
-    @action(detail=False, methods=['get'], url_path='fechas-no-disponibles/(?P<habitacion_id>\d+)')
+    @action(detail=False, methods=['get'], url_path='fechas-no-disponibles/(?P<habitacion_id>\\d+)')
     def fechas_no_disponibles(self, request, habitacion_id=None):
         if not habitacion_id:
             return Response({'message': 'Se requiere el ID de la habitacion.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        exclude_id = request.query_params.get('exclude', None)
         
         # Obtener todas las reservas activas/pendientes para esta habitacion
         reservas = Reserva.objects.filter(
@@ -255,6 +290,9 @@ class ReservaViewSet(viewsets.ModelViewSet):
             Estado=True,
             estado__in=['pendiente', 'activo']
         )
+        
+        if exclude_id:
+            reservas = reservas.exclude(id_reserva=exclude_id)
         
         fechas_ocupadas = []
         import datetime

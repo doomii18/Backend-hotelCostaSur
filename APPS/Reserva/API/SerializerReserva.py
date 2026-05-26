@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from APPS.Reserva.models import Reserva
+import json
 
 
 class SerializerReserva(serializers.ModelSerializer):
@@ -22,9 +23,12 @@ class SerializerReserva(serializers.ModelSerializer):
     habitacionId = serializers.ReadOnlyField(source='id_habitacion.id')
     habitacionNombre = serializers.SerializerMethodField()
     habitacionTipo = serializers.SerializerMethodField()
+    habitacionNumero = serializers.ReadOnlyField(source='id_habitacion.Numero_Habitacion')
+    habitacionDescripcion = serializers.SerializerMethodField()
+    precioPorNoche = serializers.ReadOnlyField(source='id_habitacion.precio')
 
     # Mapear campo interno a formato frontend
-    num_huespedes = serializers.IntegerField(source='CantidadHuespedes')
+    huespedes = serializers.IntegerField(source='CantidadHuespedes', read_only=True)
 
     # Alias frontend-friendly
     id = serializers.IntegerField(source='id_reserva', read_only=True)
@@ -35,16 +39,25 @@ class SerializerReserva(serializers.ModelSerializer):
         model = Reserva
         fields = [
             'id', 'id_reserva', 'id_cliente', 'id_habitacion', 'usuarioId', 'habitacionId',
-            'usuarioNombre', 'habitacionNombre', 'habitacionTipo',
+            'usuarioNombre', 'habitacionNombre', 'habitacionTipo', 'habitacionNumero',
+            'habitacionDescripcion', 'precioPorNoche',
             'estado', 'Estado', 'fecha_ingreso', 'fecha_salida', 'fechaIngreso', 'fechaSalida',
-            'dias', 'total',
+            'dias', 'total', 'huespedes',
             'nombres', 'apellidos', 'tipo_documento', 'cedula', 'pais_pasaporte', 'pasaporte',
-            'sexo', 'fecha_nacimiento', 'nacionalidad', 'procedencia', 'num_huespedes',
+            'sexo', 'fecha_nacimiento', 'nacionalidad', 'procedencia',
             'metodo_pago', 'fecha_reserva'
         ]
 
     def get_habitacionNombre(self, obj):
         return f"Habitacion {obj.id_habitacion.Numero_Habitacion}"
+
+    def get_habitacionDescripcion(self, obj):
+        desc = obj.id_habitacion.Descripcion
+        try:
+            parsed = json.loads(desc)
+            return parsed.get('tipo', desc)
+        except Exception:
+            return desc
 
     def get_habitacionTipo(self, obj):
         desc = obj.id_habitacion.Descripcion.lower()
