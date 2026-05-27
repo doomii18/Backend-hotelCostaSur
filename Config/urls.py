@@ -5,7 +5,13 @@ from APPS.Reserva.API.ReservaAPI import ReservaViewSet
 from APPS.Habitacion.API.HabitacionAPI import HabitacionViewSet
 from APPS.Sorteo.API.SorteoAPI import SorteoViewSet
 
+from django.http import JsonResponse
+
+def test_deploy_status(request):
+    return JsonResponse({'status': 'running latest code', 'version': 'dcf7b75_updated'})
+
 urlpatterns = [
+    path('api/test-deploy-status/', test_deploy_status),
     path('admin/', admin.site.urls),
     path('api/usuarios/registro/', UsuarioViewSet.as_view({'post': 'register_user'})),
     path('api/usuarios/login/', UsuarioViewSet.as_view({'post': 'login_user'})),
