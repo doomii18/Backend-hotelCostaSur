@@ -14,6 +14,30 @@ class SerializerUsuario(serializers.ModelSerializer):
         model = Usuario
         fields = ['id', 'id_usuario', 'nombre', 'email', 'password', 'rol', 'fechaRegistro', 'Estado']
 
+    def validate(self, attrs):
+        usuario_val = attrs.get('usuario')
+        correo_val = attrs.get('correo')
+
+        if usuario_val:
+            qs = Usuario.objects.filter(usuario=usuario_val)
+            if self.instance:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise serializers.ValidationError({
+                    'nombre': 'El nombre de usuario ya está registrado.'
+                })
+
+        if correo_val:
+            qs = Usuario.objects.filter(correo=correo_val)
+            if self.instance:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise serializers.ValidationError({
+                    'email': 'El correo electrónico ya está registrado.'
+                })
+
+        return attrs
+
     def create(self, validated_data):
         password = validated_data.pop('password', '')
         usuario = Usuario(**validated_data)
@@ -29,3 +53,4 @@ class SerializerUsuario(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+

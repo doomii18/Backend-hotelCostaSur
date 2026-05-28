@@ -169,7 +169,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 reserva = self.get_object()
-                reserva.Estado = False
+                reserva.Estado = True
                 reserva.estado = 'cancelado'
                 reserva.save()
 
@@ -195,7 +195,7 @@ class ReservaViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 reserva = Reserva.objects.get(pk=id_reserva)
-                reserva.Estado = False
+                reserva.Estado = True
                 reserva.estado = 'cancelado'
                 reserva.save()
 
