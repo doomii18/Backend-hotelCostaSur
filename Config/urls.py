@@ -8,7 +8,7 @@ from APPS.Sorteo.API.SorteoAPI import SorteoViewSet
 from django.http import JsonResponse
 
 def test_deploy_status(request):
-    return JsonResponse({'status': 'running latest code', 'version': 'dcf7b75_updated'})
+    return JsonResponse({'status': 'running latest code - visitas enabled', 'version': 'f951f15_visita_app'})
 
 urlpatterns = [
     path('api/test-deploy-status/', test_deploy_status),
