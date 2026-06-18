@@ -27,4 +27,5 @@ urlpatterns = [
     path('api/habitaciones/', include('APPS.Habitacion.API.Urls')),
     path('api/reservas/', include('APPS.Reserva.API.Urls')),
     path('api/sorteos/', include('APPS.Sorteo.API.Urls')),
+    path('api/visitas/', include('APPS.Visita.urls')),
 ]

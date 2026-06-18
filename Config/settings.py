@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'APPS.Habitacion.apps.HabitacionConfig',
     'APPS.Reserva.apps.ReservaConfig',
     'APPS.Sorteo.apps.SorteoConfig',
+    'APPS.Visita.apps.VisitaConfig',
 ]
 
 MIDDLEWARE = [
