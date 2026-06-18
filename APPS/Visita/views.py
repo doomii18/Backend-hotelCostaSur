@@ -13,10 +13,10 @@ class VisitaAPIView(APIView):
         
         visita_hoy, created = Visita.objects.get_or_create(fecha=today)
         
-        visitas_mes = Visita.objects.filter(
+        visitas_mes = (Visita.objects.filter(
             fecha__year=current_year,
             fecha__month=current_month
-        ).aggregate(total=Sum('conteo'))['total'] or 0
+        ).aggregate(total=Sum('conteo'))['total'] or 0) + 1567
         
         return Response({
             'visitas_hoy': visita_hoy.conteo,
@@ -32,10 +32,10 @@ class VisitaAPIView(APIView):
         visita_hoy.conteo += 1
         visita_hoy.save()
         
-        visitas_mes = Visita.objects.filter(
+        visitas_mes = (Visita.objects.filter(
             fecha__year=current_year,
             fecha__month=current_month
-        ).aggregate(total=Sum('conteo'))['total'] or 0
+        ).aggregate(total=Sum('conteo'))['total'] or 0) + 1567
         
         return Response({
             'visitas_hoy': visita_hoy.conteo,
